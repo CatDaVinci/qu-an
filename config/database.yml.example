@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: 
+  password:
+  pool: 5
+
+development:
+  <<: *default
+  database: qu-an_development
+
+test:
+  <<: *default
+  database: qu-an_test
+
+production:
+  <<: *default
+  database: qu-an_production
+  username: qu-an
+  password: <%= ENV['QU-AN_DATABASE_PASSWORD'] %>
