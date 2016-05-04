@@ -1,0 +1,6 @@
+h1 = @question.title
+h1 = @question.body
+h3 Answers
+ul
+  - @question.answers.each do |answer|
+    p = answer.body

@@ -1,0 +1,33 @@
+language: ruby
+rvm:
+  - 2.2.3
+
+# Если Travis пишет вам слишком часто, то отключаем email уведомления
+notifications:
+  email: false
+
+# Указываем базу данных
+addons:
+  postgresql: "9.4"
+
+# Аргументы для bundler
+bundler_args: --without development --deployment --jobs=3 --retry=3
+
+# Кэшируем гемы, чтобы не устанавливать каждый раз все заново
+cache: bundler
+
+before_script:
+  # Создаем базу
+  - psql -c 'create database th_demo_test;' -U postgres
+  # Копируем конфиги
+  - cp config/database.travis.yml config/database.yml
+  - cp config/secrets.travis.yml config/secrets.yml
+  # Формируем структуру базы
+  - bundle exec rake db:setup
+  # Запускаем PrivatePub
+  - 'bundle exec rackup -s puma -E production private_pub.ru &'
+  # Ждем, пока PrivatePub проинициализируется
+  - sleep 3
+
+gemfile:
+  - Gemfile

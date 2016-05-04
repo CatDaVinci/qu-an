@@ -30,17 +30,25 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'pry-rails'
+  gem 'faker'
 end
 
 group :development do
   gem 'web-console', '~> 2.0'
   gem 'spring'
-  gem 'rubocop', require: false
+  gem 'spring-commands-rspec'
+  gem 'guard-bundler',           require: false
+  gem 'guard-rails',             require: false
+  gem 'guard-spring',            require: false
+  gem 'guard-rspec',             require: false
+  gem 'terminal-notifier-guard', require: false
+  gem 'rubocop',                 require: false
+  gem 'rubocop-rspec',           require: false
 end
 
 group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'launchy'
-  gem 'faker'
+  gem 'fuubar'
 end
