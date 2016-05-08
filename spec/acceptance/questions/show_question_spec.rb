@@ -6,8 +6,9 @@ feature 'Look through question', %q{
   I want to be able to see question and answers for it
 } do
 
-  given(:question) { create(:question) }
-  given!(:answer)   { create_list(:answer, 5, question: question) }
+  given(:user)      { create(:user) }
+  given(:question)  { create(:question, user: user) }
+  given!(:answer)   { create_list(:answer, 5, question: question, user: user) }
 
   scenario 'User see question and answers for it' do
     visit question_path(question)

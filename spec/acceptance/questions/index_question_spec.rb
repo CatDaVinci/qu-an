@@ -6,7 +6,8 @@ feature 'Look through questions', %q{
   I want to be able to see list of questions
 } do
 
-  given!(:questions) { create_list(:question, 5) }
+  given(:user) { create(:user) }
+  given!(:questions) { create_list(:question, 5, user: user) }
 
   scenario 'User look through questions' do
     visit questions_path

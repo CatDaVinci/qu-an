@@ -3,16 +3,21 @@ class AnswersController < ApplicationController
   before_action :load_question
 
   def new
-    @answer = @question.answers.build
+    @answer = Answer.new(question: @question, user: current_user)
   end
 
   def create
-    @answer = @question.answers.build(answer_params)
+    @answer = Answer.new({ question: @question, user: current_user }.merge answer_params)
     if @answer.save
       redirect_to question_path(@question)
     else
       render :new
     end
+  end
+
+  def destroy
+    @question.answers.find(params[:id]).destroy
+    redirect_to @question
   end
 
   private
