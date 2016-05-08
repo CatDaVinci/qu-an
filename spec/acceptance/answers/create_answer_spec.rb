@@ -7,11 +7,11 @@ feature 'Create answer', %q{
 } do
 
   given(:user)     { create(:user) }
-  given(:question) { create(:question) }
+  given!(:question) { create(:question) }
 
-  scenario 'Authenticated user create answer with valid date' do
-    #sign_in user
-    visit questions_path(question)
+  scenario 'Authenticated user create answer with valid data' do
+    sign_in user
+    visit questions_path
     first('.create-answer').click
     fill_in 'Body', with: 'My answer'
     click_on "Create"
@@ -20,9 +20,9 @@ feature 'Create answer', %q{
     expect(current_path).to eq question_path(question)
   end
 
-  scenario 'Authenticated user create answer with invalid date' do
-    #sign_in user
-    visit questions_path(question)
+  scenario 'Authenticated user create answer with invalid data' do
+    sign_in user
+    visit questions_path
     first('.create-answer').click
     fill_in 'Body', with: ''
     click_on "Create"
@@ -30,11 +30,12 @@ feature 'Create answer', %q{
     expect(page).to_not have_content 'My answer'
   end
 
-  # scenario 'Not Authenticated user create answer' do
-  #   visit new_question_answer_path(question_id: question)
-  #
-  #   expect(page).to have_content 'For create answer you mast be authenticated user'
-  #   expect(current_path).to eq questions_path
-  # end
+  scenario 'Not Authenticated user create answer' do
+    visit visit questions_path
+    first('.create-answer').click
+
+    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(current_path).to eq new_user_session_path
+  end
 
 end

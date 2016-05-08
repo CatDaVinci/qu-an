@@ -1,20 +1,21 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [ :index, :show ]
-  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :load_question, only: [:edit, :update, :destroy]
 
   def index
     @questions = Question.all
   end
 
   def show
+    @question = Question.find(params[:id])
   end
 
   def new
-    @question = Question.new
+    @question = current_user.questions.build
   end
 
   def create
-    @question = Question.new(question_params)
+    @question = current_user.questions.build(question_params)
     if @question.save
       flash[:notice] = 'Your question successfully created.'
       redirect_to @question
@@ -28,8 +29,10 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
+      flash[:notice] = 'Question was successfully update!'
       redirect_to @question
     else
+      flash[:notice] = 'You fill invalid data!'
       render :edit
     end
   end
@@ -42,7 +45,7 @@ class QuestionsController < ApplicationController
   private
 
   def load_question
-    @question = Question.find(params[:id])
+    @question = current_user.questions.find(params[:id])
   end
 
   def question_params
