@@ -44,15 +44,21 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:my_answer) { create(:answer, question: question, user: @user) }
+    let!(:my_answer)  { create(:answer, question: question, user: @user) }
+    let(:user)        { create(:user) }
+    let!(:answer)     { create(:answer, question: question, user: user) }
 
-    it 'delete question' do
+    it 'delete my question' do
       expect { delete :destroy, id: my_answer, question_id: question }.to change(question.answers, :count).by(-1)
     end
 
-    it 'redirect to index view' do
+    it 'redirect to index view after delete my question' do
       delete :destroy, id: my_answer, question_id: question
       expect(response).to redirect_to question_path(question)
+    end
+
+    it 'delete foreign question' do
+      expect { delete :destroy, id: answer, question_id: question }.to change(question.answers, :count).by(0)
     end
   end
 end
