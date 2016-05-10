@@ -21,14 +21,14 @@ feature 'Delete answer', %q{
     expect(all('.answer').count).to eq 0
   end
 
-  scenario 'Authorized user can delete foreign answer' do
+  scenario 'Authorized user can not delete foreign answer' do
     sign_in user
     visit question_path(question)
 
     expect(all('.destroy-answer').count).to eq 0
   end
 
-  scenario 'Unauthorized user can delete foreign answer' do
+  scenario 'Unauthorized user can not delete foreign answer' do
     visit question_path(question)
 
     expect(all('.destroy-answer').count).to eq 0
