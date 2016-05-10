@@ -1,13 +1,13 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [ :index, :show ]
-  before_action :load_question, only: [:edit, :update, :destroy]
+  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :my_question?, only: [:edit, :update, :destroy]
 
   def index
     @questions = Question.all
   end
 
   def show
-    @question = Question.find(params[:id])
   end
 
   def new
@@ -45,10 +45,17 @@ class QuestionsController < ApplicationController
   private
 
   def load_question
-    @question = current_user.questions.find(params[:id])
+    @question = Question.find(params[:id])
   end
 
   def question_params
     params.require(:question).permit(:title, :body)
+  end
+
+  def my_question?
+    if current_user != @question.user
+      falsh[:notice] = 'Access Denied'
+      redirect_to :back
+    end
   end
 end
