@@ -8,15 +8,15 @@ feature 'Look through question', %q{
 
   given(:user)      { create(:user) }
   given(:question)  { create(:question, user: user) }
-  given!(:answer)   { create_list(:answer, 2, question: question, user: user) }
+  given!(:answer1)   { create(:answer, question: question, user: user, body: 'MyText1') }
+  given!(:answer2)   { create(:answer, question: question, user: user, body: 'MyText2') }
 
   scenario 'User see question and answers for it' do
     visit question_path(question)
 
     expect(page).to have_content question.title
     expect(page).to have_content question.body
-    answers = all('.answer-body')
-    expect(answers.count).to eq 2
-    answers.each { |a| expect(a.text).to eq 'MyText' }
+    expect(page).to have_content 'MyText1'
+    expect(page).to have_content 'MyText2'
   end
 end

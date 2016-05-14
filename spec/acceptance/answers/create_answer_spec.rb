@@ -28,6 +28,7 @@ feature 'Create answer', %q{
     click_on "Create"
 
     expect(page).to_not have_content 'My answer'
+    expect(page).to have_content 'You fill invalid data!'
   end
 
   scenario 'Not Authenticated user create answer' do

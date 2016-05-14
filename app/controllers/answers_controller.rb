@@ -12,13 +12,14 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to question_path(@question)
     else
+      flash[:notice] = 'You fill invalid data!'
       render :new
     end
   end
 
   def destroy
     @answer = @question.answers.find(params[:id])
-    @answer.destroy if current_user.id == @answer.user.id
+    @answer.destroy if current_user.id == @answer.user_id
     redirect_to @question
   end
 

@@ -7,14 +7,14 @@ feature 'Look through questions', %q{
 } do
 
   given(:user) { create(:user) }
-  given!(:questions) { create_list(:question, 2, user: user) }
+  given!(:question1) { create(:question, user: user, title: 'Title1') }
+  given!(:question2) { create(:question, user: user, title: 'Title2') }
 
   scenario 'User look through questions' do
     visit questions_path
 
-    questions = all('.question strong')
-    expect(questions.count).to eq 2
-    questions.each { |q| expect(q.text).to eq 'MyString' }
+    expect(page).to have_content 'Title1'
+    expect(page).to have_content 'Title2'
   end
 
 end

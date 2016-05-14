@@ -53,7 +53,7 @@ class QuestionsController < ApplicationController
   end
 
   def redirect_if_not_own_question
-    if current_user.id != @question.user.id
+    if current_user.id != @question.user_id
       redirect_to :back
     end
   end

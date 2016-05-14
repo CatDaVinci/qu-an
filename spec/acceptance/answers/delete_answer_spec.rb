@@ -9,29 +9,28 @@ feature 'Delete answer', %q{
   given(:me)        { create(:user) }
   given(:user)      { create(:user) }
   given(:question)  { create(:question, user: me) }
-  given!(:answer)   { create(:answer, question: question, user: me) }
+  given!(:answer)   { create(:answer, question: question, user: me, body: 'MyAnswer') }
 
   scenario 'Author can delete own answer' do
     sign_in me
     visit question_path(question)
-
     first('.destroy-answer').click
 
     expect(current_path).to eq question_path(question)
-    expect(all('.answer').count).to eq 0
+    expect(page).to_not have_content 'MyAnswer'
   end
 
   scenario 'Authorized user can not delete foreign answer' do
     sign_in user
     visit question_path(question)
 
-    expect(all('.destroy-answer').count).to eq 0
+    expect(page).to_not have_content 'Destroy'
   end
 
   scenario 'Unauthorized user can not delete foreign answer' do
     visit question_path(question)
 
-    expect(all('.destroy-answer').count).to eq 0
+    expect(page).to_not have_content 'Destroy'
   end
 
 end
