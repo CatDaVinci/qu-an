@@ -15,9 +15,8 @@ feature 'Create answer', %q{
     fill_in 'Body', with: 'My answer'
     click_on "Create"
 
-    save_and_open_page
     within '.answers' do
-      expect(current_path).to eq question_path(question)
+      expect(page).to have_content('My answer')
     end
 
     expect(current_path).to eq question_path(question)

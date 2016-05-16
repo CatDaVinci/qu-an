@@ -1,8 +1,8 @@
 h1 =  "Title: #{@question.title}"
 h1 =  "Body: #{@question.body}"
 
-.answers-block
-  h3 Answers
+h3 Answers
+.answers
   = render 'answers'
 
 - if user_signed_in?

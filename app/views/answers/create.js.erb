@@ -1,6 +1,6 @@
 <% if @answer.errors.empty? %>
-  $('.answers-block').html("<%= j render 'questions/answers'%>")
-  $('#answer_body').val('')
+  $('.answers').append("<%= j render 'answer', answer: @answer, question: @question %>")
+  $('#answer-body').val('')
 <% else %>
   $('.notice').html("You fill invalid data for answer!")
 <% end %>
