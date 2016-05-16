@@ -2,19 +2,8 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question
 
-
-  def new
-    @answer = Answer.new(question: @question, user: current_user)
-  end
-
   def create
-    @answer = @question.answers.new(answer_params.merge({ user: current_user }))
-    if @answer.save
-      redirect_to question_path(@question)
-    else
-      flash[:notice] = 'You fill invalid data!'
-      render :new
-    end
+    @answer = @question.answers.create(answer_params.merge({ user: current_user }))
   end
 
   def destroy

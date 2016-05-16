@@ -6,37 +6,35 @@ feature 'Create answer', %q{
   I want to be able to answer on question
 } do
 
-  given(:user)      { create(:user) }
+  given(:user)       { create(:user) }
   given!(:question)  { create(:question, user: user) }
 
-  scenario 'Authenticated user create answer with valid data' do
+  scenario 'Authenticated user create answer with valid data', js: true do
     sign_in user
-    visit questions_path
-    first('.create-answer').click
+    visit question_path(question)
     fill_in 'Body', with: 'My answer'
     click_on "Create"
 
-    expect(page).to have_content 'My answer'
+    save_and_open_page
+    within '.answers' do
+      expect(current_path).to eq question_path(question)
+    end
+
     expect(current_path).to eq question_path(question)
   end
 
-  scenario 'Authenticated user create answer with invalid data' do
+  scenario 'Authenticated user create answer with invalid data', js: true do
     sign_in user
-    visit questions_path
-    first('.create-answer').click
+    visit question_path(question)
     fill_in 'Body', with: ''
     click_on "Create"
-
-    expect(page).to_not have_content 'My answer'
-    expect(page).to have_content 'You fill invalid data!'
+    expect(page).to have_content 'You fill invalid data for answer!'
   end
 
   scenario 'Not Authenticated user create answer' do
     visit visit questions_path
-    first('.create-answer').click
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
-    expect(current_path).to eq new_user_session_path
+    expect(page).to_not have_content 'Yor answer'
   end
 
 end

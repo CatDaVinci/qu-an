@@ -48,6 +48,9 @@ group :development do
 end
 
 group :test do
+  gem 'chromedriver-helper'
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'launchy'
