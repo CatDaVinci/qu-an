@@ -32,6 +32,10 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-nav'
   gem 'faker'
+  gem 'capybara-webkit'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'database_cleaner'
 end
 
 group :development do
@@ -48,11 +52,6 @@ group :development do
 end
 
 group :test do
-  gem 'chromedriver-helper'
-  gem 'selenium-webdriver'
-  gem 'database_cleaner'
   gem 'shoulda-matchers'
-  gem 'capybara'
-  gem 'launchy'
   gem 'fuubar'
 end
