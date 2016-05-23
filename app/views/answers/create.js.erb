@@ -1,6 +1,9 @@
-<% if @answer.errors.empty? %>
+<% if @answer.errors.present? %>
+  $('.notice').html("You fill invalid data for answer!")
+  <% @answer.errors.full_messages.each do |message| %>
+    $('.answer-errors').html('<p><%= j message %></p>');
+  <% end %>
+<% else %>
   $('.answers').append("<%= j render 'answer', answer: @answer, question: @question %>")
   $('#answer-body').val('')
-<% else %>
-  $('.notice').html("You fill invalid data for answer!")
 <% end %>

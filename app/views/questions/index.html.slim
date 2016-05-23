@@ -2,9 +2,8 @@ ul
   - @questions.each do |question|
     li.question
       p
-        strong= question.title
+        strong
+          = link_to question.title, question_path(question)
       p= question.body
-      = link_to 'Create Answer', new_question_answer_path(question_id: question), class: 'create-answer'
-
 
 p= link_to 'Ask question', new_question_path

@@ -8,8 +8,9 @@ h3 Answers
 - if user_signed_in?
   h3 You answer
   = form_for([@question, @question.answers.build], remote: true) do |f|
+    .answer-errors
     = f.label :body
-    = f.text_field :body
+    = f.text_area :body
     = f.submit 'Create'
 
   - if current_user.id == @question.user_id
