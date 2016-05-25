@@ -12,6 +12,11 @@ class AnswersController < ApplicationController
     redirect_to @question
   end
 
+  def update
+    @answer = @question.answers.find(params[:id])
+    @answer.update(answer_params)
+  end
+
   private
 
   def load_question
