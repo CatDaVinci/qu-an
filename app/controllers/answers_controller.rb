@@ -9,7 +9,6 @@ class AnswersController < ApplicationController
   def destroy
     @answer = @question.answers.find(params[:id])
     @answer.destroy if current_user.id == @answer.user_id
-    redirect_to @question
   end
 
   def update

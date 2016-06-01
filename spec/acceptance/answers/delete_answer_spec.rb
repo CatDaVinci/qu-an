@@ -11,7 +11,7 @@ feature 'Delete answer', %q{
   given(:question)  { create(:question, user: me) }
   given!(:answer)   { create(:answer, question: question, user: me, body: 'MyAnswer') }
 
-  scenario 'Author can delete own answer' do
+  scenario 'Author can delete own answer', js: true do
     sign_in me
     visit question_path(question)
     first('.destroy-answer').click

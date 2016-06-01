@@ -9,4 +9,4 @@ div.answer{data-answer-id="#{answer.id}"}
         = f.text_area :body
         = f.submit 'Save'
     p
-      = button_to 'Delete', question_answer_path(question, answer), method: :delete, class: 'destroy-answer'
+      = button_to 'Delete', question_answer_path(question, answer), method: :delete, remote: true, class: 'destroy-answer'
