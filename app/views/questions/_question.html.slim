@@ -1,0 +1,18 @@
+li.question{data-question-id="#{question.id}"}
+  p
+    strong
+      = link_to question.title, question_path(question)
+  p= question.body
+  - if user_signed_in? && current_user.id == question.user_id
+    p
+      = link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
+    p
+      = form_for question, remote: true, html: { id: "edit-question-#{question.id}"} do |f|
+        .question-errors
+        = f.label :title
+        = f.text_field :title
+        = f.label :body
+        = f.text_area :body
+        = f.submit 'Submit'
+    p
+      = button_to 'Delete', question_path(question), method: :delete, class: 'destroy-question'

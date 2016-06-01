@@ -43,22 +43,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    sign_in_user
-
-    let(:my_question) { create(:question, user: @user) }
-
-    before { get :edit, id: my_question }
-
-    it 'assigns the request question to @question' do
-      expect(assigns(:question)).to eq my_question
-    end
-
-    it 'render edit view' do
-      expect(response).to render_template :edit
-    end
-  end
-
   describe 'POST #create' do
     sign_in_user
 
@@ -92,34 +76,25 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'with valid attributes' do
       it 'assigns the requested question to @question' do
-        patch :update, id: my_question, question: attributes_for(:question)
+        patch :update, id: my_question, question: attributes_for(:question), format: :js
         expect(assigns(:question)).to eq my_question
       end
 
       it 'change question attributes' do
-        patch :update, id: my_question, question: { title: 'new_title', body: 'new_body' }
+        patch :update, id: my_question, question: { title: 'new_title', body: 'new_body' }, format: :js
         my_question.reload
         expect(my_question.title).to eq 'new_title'
         expect(my_question.body).to eq 'new_body'
       end
-
-      it 'redirect to show view' do
-        patch :update, id: my_question, question: attributes_for(:question)
-        expect(response).to redirect_to my_question
-      end
     end
 
     context 'with invalid attributes' do
-      before { patch :update, id: my_question, question: { title: 'new_title', body: nil } }
+      before { patch :update, id: my_question, question: { title: 'new_title', body: nil }, format: :js }
 
       it 'does not change attributes' do
         my_question.reload
         expect(my_question.title).to eq 'MyTitle'
         expect(my_question.body).to eq 'MyText'
-      end
-
-      it 're-render edit view' do
-        expect(response).to render_template :edit
       end
     end
   end
