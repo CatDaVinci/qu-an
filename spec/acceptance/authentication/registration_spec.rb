@@ -16,7 +16,7 @@ feature 'User register', %q{
 
     click_button 'Sign up'
 
-    expect(page).to have_content('Hello, test@mail.ru')
+    expect(page).to have_content('test@mail.ru')
     expect(page).to have_content('Welcome! You have signed up successfully.')
     expect(current_path).to eq root_path
   end
