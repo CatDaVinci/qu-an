@@ -9,6 +9,8 @@ feature 'Edit qestion', %q{
   given(:me)   { create(:user) }
   given(:user) { create(:user) }
   given!(:my_question) { create(:question, user: me) }
+  given!(:answer) { create(:answer, question: my_question) }
+  given!(:best_answer) { create(:answer, question: my_question) }
 
   context 'Author edit own question' do
 
@@ -34,18 +36,49 @@ feature 'Edit qestion', %q{
       click_on 'Submit'
       expect(page).to have_content 'You fill invalid data!'
     end
+
+    scenario 'choose best answer', js: true do
+      visit question_path(my_question)
+
+      within "[data-answer-id='#{best_answer.id}']" do
+        click_on "Best"
+      end
+
+      expect(page).to have_content 'TOP'
+      within '.answers' do
+        expect(first('.answer').has_selector?("[data-answer-id='#{best_answer.id}']")).to eq true
+      end
+    end
+
+    scenario 'change best anser'
+    #TODO answers can`t be deleted when chage best
   end
 
-  scenario 'Authentication user can`t edit foreign question' do
-    sign_in(user)
+  context 'Authentication user' do
+    before { sign_in user }
 
-    visit questions_path
-    expect(page).to_not have_link 'Edit'
+    scenario 'can`t edit foreign question' do
+      visit questions_path
+      expect(page).to_not have_link 'Edit'
+    end
+
+    scenario 'can`t choose best answer' do
+      visit question_path(my_question)
+
+      expect(page).to_not have_content 'Best'
+    end
   end
 
-  scenario 'User can`t edit foreign question' do
-    visit questions_path
-    expect(page).to_not have_link 'Edit'
-  end
+  context 'Not authentication user' do
+    scenario 'can`t edit foreign question' do
+      visit questions_path
+      expect(page).to_not have_link 'Edit'
+    end
 
+    scenario 'can`t choose best answer' do
+      visit question_path(my_question)
+
+      expect(page).to_not have_content 'Best'
+    end
+  end
 end

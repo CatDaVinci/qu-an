@@ -5,6 +5,11 @@
   <% end %>
 <% else %>
   $('.notice').html("Question was succesfully update!")
+  // THIS UPDATE FOR INDEX I MUST DO UPDATE FOR SHOW NEED THINK
+  // $('[data-answer-id] .top').html('');
+  // <% if @question.best_answer_id %>
+  //   $('[data-answer-id="' + <%= @question.best_answer_id %> + '"] .top').html('<span>TOP</span>');
+  // <% end %>
   $('[data-question-id="' + "<%= @question.id %>" + '"]')
     .replaceWith("<%= j render 'question', question: @question %>")
 
