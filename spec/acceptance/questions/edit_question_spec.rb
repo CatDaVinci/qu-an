@@ -46,12 +46,9 @@ feature 'Edit qestion', %q{
 
       expect(page).to have_content 'TOP'
       within '.answers' do
-        expect(first('.answer').has_selector?("[data-answer-id='#{best_answer.id}']")).to eq true
+        expect(first('.answer')["data-answer-id"].to_i).to eq best_answer.id
       end
     end
-
-    scenario 'change best anser'
-    #TODO answers can`t be deleted when chage best
   end
 
   context 'Authentication user' do

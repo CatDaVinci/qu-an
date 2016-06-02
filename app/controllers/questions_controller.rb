@@ -25,6 +25,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
+    @change_best = true if question_params[:best_answer_id]
     @question.update(question_params)
   end
 
