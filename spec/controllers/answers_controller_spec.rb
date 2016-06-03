@@ -54,6 +54,19 @@ RSpec.describe AnswersController, type: :controller do
       patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
       expect(response).to render_template :update
     end
+
+    context 'best' do
+      let!(:best_answer) { create(:answer, question: question, best: true) }
+
+      before { patch :update, id: answer, question_id: question, answer: { best: true }, format: :js }
+
+      it 'change' do
+        answer.reload
+        best_answer.reload
+        expect(answer.best).to eq true
+        expect(best_answer.best).to eq false
+      end
+    end
   end
 
   describe 'DELETE #destroy' do

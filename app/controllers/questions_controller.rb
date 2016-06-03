@@ -25,7 +25,6 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @change_best = true if question_params[:best_answer_id]
     @question.update(question_params)
   end
 
@@ -41,7 +40,7 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, :best_answer_id)
+    params.require(:question).permit(:title, :body)
   end
 
   def redirect_if_not_own_question

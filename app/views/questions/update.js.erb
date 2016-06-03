@@ -1,22 +1,10 @@
-<% if @change_best %>
-  $('[data-answer-id] .top').html('');
-  $('.answers').html('<%= j render "answers" %>');
-<% else %>
-  <% if @question.errors.present? %>
-    $('.notice').html("You fill invalid data!")
-    <% @question.errors.full_messages.each do |message| %>
-      $('.question-errors').html('<p><%= j message %></p>');
-    <% end %>
-  <% else %>
-    $('.notice').html("Question was succesfully update!")
-    $('[data-question-id="' + "<%= @question.id %>" + '"]')
-      .replaceWith("<%= j render 'question', question: @question %>")
-
-    $('.edit-question-link').click(function(e) {
-      e.preventDefault();
-      $(this).hide();
-      question_id = $(this).data('questionId');
-      $('form#edit-question-' + question_id).show();
-    });
+<% if @question.errors.present? %>
+  $('.notice').html("You fill invalid data!")
+  <% @question.errors.full_messages.each do |message| %>
+    $('.question-errors').html('<p><%= j message %></p>');
   <% end %>
+<% else %>
+  $('.notice').html("Question was succesfully update!")
+  $('[data-question-id="' + "<%= @question.id %>" + '"]')
+    .replaceWith("<%= j render 'question', question: @question %>")
 <% end %>

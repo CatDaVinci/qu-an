@@ -1,6 +1,6 @@
 div.answer{data-answer-id="#{answer.id}"}
   div.top
-    -if answer.id == question.best_answer_id
+    -if answer.best
       span TOP
   p.answer-body = answer.body
   - if user_signed_in? && current_user.id == answer.user_id
@@ -14,6 +14,6 @@ div.answer{data-answer-id="#{answer.id}"}
     p
       = button_to 'Delete', question_answer_path(question, answer), method: :delete, remote: true, class: 'destroy-answer'
   - if user_signed_in? && current_user.id == question.user_id
-    = form_for question, method: :patch, remote: true, html: { class: 'best-answer' } do |f|
-      = f.hidden_field :best_answer_id, value: answer.id
+    = form_for [question, answer], method: :patch, remote: true, html: { class: 'best-answer' } do |f|
+      = f.hidden_field :best, value: true
       = f.submit "Best"

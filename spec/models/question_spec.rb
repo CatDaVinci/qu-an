@@ -11,15 +11,4 @@ RSpec.describe Question, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
   it { should belong_to(:user) }
   it { should have_one(:best_answer) }
-
-
-  let!(:question) { create(:question) }
-  let!(:answer) { create(:answer, question: question) }
-  let(:best_answer) { create(:answer, question: question) }
-
-  before { question.best_answer_id = best_answer.id }
-
-  it 'order by best answer' do
-    expect(question.order_answers_by_best.to_a).to match_array [best_answer, answer]
-  end
 end

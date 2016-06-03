@@ -1,16 +1,21 @@
-<% if @answer.errors.present? %>
-  $('.notice').html("You fill invalid data for answer!")
-  <% @answer.errors.full_messages.each do |message| %>
-    $('.answer-errors').html('<p><%= j message %></p>');
-  <% end %>
+<% if @change_best %>
+  $('[data-answer-id] .top').html('');
+  $('.answers').html('<%= j render "questions/answers" %>');
 <% else %>
-  $('[data-answer-id="' + "<%= @answer.id %>" + '"]')
-    .replaceWith("<%= j render 'answer', answer: @answer, question: @question %>")
+  <% if @answer.errors.present? %>
+    $('.notice').html("You fill invalid data for answer!")
+    <% @answer.errors.full_messages.each do |message| %>
+      $('.answer-errors').html('<p><%= j message %></p>');
+    <% end %>
+  <% else %>
+    $('[data-answer-id="' + "<%= @answer.id %>" + '"]')
+      .replaceWith("<%= j render 'answer', answer: @answer, question: @question %>")
 
-  $('.edit-answer-link').click(function(e) {
-    e.preventDefault();
-    $(this).hide();
-    answer_id = $(this).data('answerId');
-    $('form#edit-answer-' + answer_id).show();
-  });
+    // $('.edit-answer-link').click(function(e) {
+    //   e.preventDefault();
+    //   $(this).hide();
+    //   answer_id = $(this).data('answerId');
+    //   $('form#edit-answer-' + answer_id).show();
+    // });
+  <% end %>
 <% end %>

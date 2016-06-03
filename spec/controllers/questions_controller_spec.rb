@@ -97,16 +97,6 @@ RSpec.describe QuestionsController, type: :controller do
         expect(my_question.body).to eq 'MyText'
       end
     end
-
-    context 'best answer' do
-      let(:answer) { create(:answer) }
-      before { patch :update, id: my_question, question: { best_answer_id: answer.id }, format: :js }
-
-      it 'add to my question' do
-        my_question.reload
-        expect(my_question.best_answer_id).to eq answer.id
-      end
-    end
   end
 
   describe 'DELETE #destroy' do

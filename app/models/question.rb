@@ -8,6 +8,6 @@ class Question < ActiveRecord::Base
   validates :title, length: { in: 1..100 }
 
   def order_answers_by_best
-    best_answer_id ? answers.order("id = #{best_answer_id} desc") : answers
+    answers.order("best desc")
   end
 end
