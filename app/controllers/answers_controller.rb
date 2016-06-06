@@ -13,12 +13,11 @@ class AnswersController < ApplicationController
 
   def update
     @answer = @question.answers.find(params[:id])
-    if answer_params[:best]
-      @change_best = true
-      _best = @question.answers.where(best: true).first
-      _best.update_attribute(:best, false) if _best
+    if params[:answer] && params[:answer][:best]
+      @answer.make_best!
+    else
+      @answer.update(answer_params)
     end
-    @answer.update(answer_params)
   end
 
   private
@@ -28,6 +27,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :best)
+    params.require(:answer).permit(:body)
   end
 end
