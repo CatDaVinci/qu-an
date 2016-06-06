@@ -1,6 +1,14 @@
 = form_for question do |f|
-  = f.label :title
-  = f.text_field :title
-  = f.label :body
-  = f.text_area :body
-  = f.submit link_title
+  p
+    = f.label :title
+    = f.text_field :title
+  p
+    = f.label :body
+    = f.text_area :body
+  p Attachments:
+  p
+    = f.fields_for :attachments do |at|
+      = at.label :file
+      = at.file_field :file
+    end
+  p= f.submit link_title
