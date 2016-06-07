@@ -1,4 +1,4 @@
-require_relative 'acceptance_helper'
+require_relative '../acceptance_helper'
 
 feature 'Add files to answer', %q{
   In order to illustrate my answer
@@ -14,7 +14,7 @@ feature 'Add files to answer', %q{
     visit question_path(question)
   end
 
-  scenario 'User add files when asks question' do
+  scenario 'User add files when asks question', js: true do
     visit question_path(question)
     fill_in 'Body', with: 'My answer'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"

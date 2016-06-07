@@ -8,9 +8,4 @@ class FileUploader < CarrierWave::Uploader::Base
   def store_dir
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
-
-  #method delegator / proxy to other method
-  # def indentifier
-  #   self.file.identifier
-  # end
 end
