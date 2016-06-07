@@ -2,7 +2,7 @@ h1 =  "Title: #{@question.title}"
 h1 =  "Body: #{@question.body}"
 p Attachments:
 - @question.attachments.each do |at|
-  li= at.file.file.filename
+  li= link_to at.file.identifier, at.file.url
 
 h3 Answers
 .answers
