@@ -43,7 +43,7 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, attachments_attributes: [:file])
+    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :_destroy])
   end
 
   def redirect_if_not_own_question
