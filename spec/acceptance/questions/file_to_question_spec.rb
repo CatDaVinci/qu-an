@@ -28,4 +28,14 @@ feature 'Add files to question' , %q{
     expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
     expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
   end
+
+  context 'Author' do
+    let(:question) {create(:question, user: user, attachments: create_list(:attachment, 2))}
+
+    scenario 'can delete file' do
+      visit question_path(question)
+      all('.remove-file').first.click
+      expect(all('.remove-file').count).to eq 1
+    end
+  end
 end
