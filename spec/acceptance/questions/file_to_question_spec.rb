@@ -7,26 +7,29 @@ feature 'Add files to question' , %q{
 } do
 
   given(:user) { create(:user) }
+  given!(:question_for_edit) {create(:question, user: user, attachments: create_list(:attachment, 2))}
 
   background do
     sign_in(user)
     visit new_question_path
   end
 
-  scenario 'User add files when asks question', js: true do
-    fill_in 'Title', with: 'First Question'
-    fill_in 'Body', with: 'Where my sandwich?'
-    click_link "Add file"
-    within '#files' do
-      file_inputs = all("input[type='file']")
-      if file_inputs.count == 2
-        file_inputs[0].set "#{Rails.root}/spec/spec_helper.rb"
-        file_inputs[1].set "#{Rails.root}/spec/rails_helper.rb"
+  context '#create' do
+    scenario 'User add files when asks question', js: true do
+      fill_in 'Title', with: 'First Question'
+      fill_in 'Body', with: 'Where my sandwich?'
+      click_link "Add file"
+      within '#files' do
+        file_inputs = all("input[type='file']")
+        if file_inputs.count == 2
+          file_inputs[0].set "#{Rails.root}/spec/spec_helper.rb"
+          file_inputs[1].set "#{Rails.root}/spec/rails_helper.rb"
+        end
       end
+      click_on 'Create'
+      expect(page).to have_link 'spec_helper.rb'
+      expect(page).to have_link 'rails_helper.rb'
     end
-    click_on 'Create'
-    expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
-    expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
   end
 
   context 'Author' do
@@ -35,7 +38,33 @@ feature 'Add files to question' , %q{
     scenario 'can delete file' do
       visit question_path(question)
       all('.remove-file').first.click
-      expect(all('.remove-file').count).to eq 1
+      expect(page).to have_css('.remove-file', count: 1)
+    end
+  end
+
+  context '#edit question' do
+    background { visit questions_path }
+
+    scenario 'User add files', js: true do
+      within "#question_#{question_for_edit.id}" do
+        click_on 'Edit'
+      end
+      click_link "Add file"
+      within '#files' do
+        file_inputs = all("input[type='file']")
+        file_inputs[-1].set "#{Rails.root}/spec/spec_helper.rb"
+      end
+      click_on 'Submit'
+      within "#question_#{question_for_edit.id}" do
+        expect(page).to have_content 'Attachments count: 3'
+      end
+    end
+
+    scenario 'User remove file', js: true do
+      click_on 'Edit'
+      first('.remove_fields').click
+      click_on 'Submit'
+      expect(page).to have_css('.file', count: 1)
     end
   end
 end

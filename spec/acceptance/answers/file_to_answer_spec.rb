@@ -8,6 +8,7 @@ feature 'Add files to answer', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
+  given!(:answer) { create(:answer, user: user, question: question, attachments: create_list(:attachment, 2)) }
 
   background do
     sign_in(user)
@@ -15,7 +16,6 @@ feature 'Add files to answer', %q{
   end
 
   scenario 'User add files when asks question', js: true do
-    visit question_path(question)
     fill_in 'Body', with: 'My answer'
     click_on 'Add file'
     within '#files' do
@@ -28,8 +28,20 @@ feature 'Add files to answer', %q{
     click_on 'Create'
 
     within '.answers' do
-      expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
-      expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
+      expect(page).to have_link 'rails_helper.rb'
+    end
+  end
+
+  context 'Author' do
+    scenario 'can delete file' do
+      within "#answer_#{answer.id}" do
+        all('.remove-answer-file').first.click
+      end
+      expect(page).to have_content("Success destroyed")
+      within "#answer_#{answer.id}" do
+        expect(page).to have_css('.remove-answer-file', count: 1)
+      end
     end
   end
 end

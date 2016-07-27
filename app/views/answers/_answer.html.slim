@@ -1,11 +1,14 @@
-div.answer{data-answer-id="#{answer.id}"}
+div.answer data-answer-id="#{answer.id}" id=dom_id(answer)
   div.top
     -if answer.best
       span TOP
   p.answer-body = answer.body
   p.attachments Attachments
   - answer.attachments.each do |at|
-    li= link_to at.file.identifier, at.file.url
+    li
+      p= link_to at.file.identifier, at.file.url
+      - if user_signed_in? && current_user.id == answer.user_id
+        p= link_to 'remove file', attachment_path(at), method: :delete, class: 'remove-answer-file'
   - if user_signed_in? && current_user.id == answer.user_id
     p
       = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }

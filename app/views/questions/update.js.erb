@@ -1,3 +1,4 @@
+alert("olololo");
 <% if @question.errors.present? %>
   $('.notice').html("You fill invalid data!")
   <% @question.errors.full_messages.each do |message| %>
@@ -8,3 +9,10 @@
   $('[data-question-id="' + "<%= @question.id %>" + '"]')
     .replaceWith("<%= j render 'question', question: @question %>")
 <% end %>
+
+$('.questions .edit-question-link').on('click', function(e) {
+  e.preventDefault();
+  $(this).hide();
+  question_id = $(this).data('questionId');
+  $('form#edit-question-' + question_id).show();
+})
