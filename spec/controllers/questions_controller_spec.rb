@@ -89,10 +89,11 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'change question attributes' do
-        patch :update, id: my_question, question: { title: 'new_title', body: 'new_body' }, format: :js
+        patch :update, id: my_question, question: { title: 'new_title', body: 'new_body', attachments: { '0' => attributes_for(:attachment)} }, format: :js
         my_question.reload
         expect(my_question.title).to eq 'new_title'
         expect(my_question.body).to eq 'new_body'
+        expect(response).to render_template :update
       end
     end
 
