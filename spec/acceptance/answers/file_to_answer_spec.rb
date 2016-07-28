@@ -8,7 +8,6 @@ feature 'Add files to answer', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  given!(:answer) { create(:answer, user: user, question: question, attachments: create_list(:attachment, 2)) }
 
   background do
     sign_in(user)
@@ -16,24 +15,27 @@ feature 'Add files to answer', %q{
   end
 
   scenario 'User add files when asks question', js: true do
-    fill_in 'Body', with: 'My answer'
-    click_on 'Add file'
-    within '#files' do
-      file_inputs = all("input[type='file']")
-      if file_inputs.count == 2
-        file_inputs[0].set "#{Rails.root}/spec/spec_helper.rb"
-        file_inputs[1].set "#{Rails.root}/spec/rails_helper.rb"
+    within '.new-answer' do
+      fill_in 'Body', with: 'My answer'
+      click_on 'Add file'
+      within '#files' do
+        file_inputs = all("input[type='file']")
+        if file_inputs.count == 2
+          file_inputs[0].set "#{Rails.root}/spec/spec_helper.rb"
+          file_inputs[1].set "#{Rails.root}/spec/rails_helper.rb"
+        end
       end
+      click_on 'Create'
     end
-    click_on 'Create'
 
-    within '.answers' do
-      expect(page).to have_link 'spec_helper.rb'
-      expect(page).to have_link 'rails_helper.rb'
-    end
+    expect(page).to have_link 'spec_helper.rb'
+    expect(page).to have_link 'rails_helper.rb'
   end
 
   context 'Author' do
+    given!(:answer) { create(:answer, user: user, question: question, attachments: create_list(:attachment, 2)) }
+    background { visit question_path(question) }
+
     scenario 'can delete file' do
       within "#answer_#{answer.id}" do
         all('.remove-answer-file').first.click
@@ -41,6 +43,34 @@ feature 'Add files to answer', %q{
       expect(page).to have_content("Success destroyed")
       within "#answer_#{answer.id}" do
         expect(page).to have_css('.remove-answer-file', count: 1)
+      end
+    end
+  end
+
+  context "#Update anser" do
+    given!(:answer) { create(:answer, user: user, question: question, attachments: create_list(:attachment, 2)) }
+    given!(:edit_answer) { create(:answer, user: user, question: question, attachments: create_list(:attachment, 2)) }
+    background { visit question_path(question) }
+
+    scenario 'User add files', js: true do
+      within "#answer_#{answer.id}" do
+        click_on 'Edit'
+        click_link "Add file"
+        within '#files' do
+          file_inputs = all("input[type='file']")
+          file_inputs[-1].set "#{Rails.root}/spec/spec_helper.rb"
+        end
+        click_on 'Save'
+        expect(page).to have_css('.answer-file', count: 3)
+      end
+    end
+
+    scenario 'User remove file', js: true do
+      within "#answer_#{edit_answer.id}" do
+        click_on 'Edit'
+        first('.remove_fields').click
+        click_on 'Save'
+        expect(page).to have_css('.answer-file', count: 1)
       end
     end
   end

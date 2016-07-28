@@ -5,5 +5,9 @@
   <% end %>
 <% else %>
   $('#answer_body').val('');
-  $('.answers').append("<%= j render 'answer', answer: @answer, question: @question %>");
+  <% if remotipart_submitted? %>
+    $('.answers').append("<%= j "#{render 'answer', answer: @answer, question: @question}" %>");
+  <% else %>
+    $('.answers').append("<%= j render 'answer', answer: @answer, question: @question %>");
+  <% end %>
 <% end %>

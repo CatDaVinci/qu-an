@@ -1,6 +1,10 @@
 <% if params[:answer][:best] %>
   $('[data-answer-id] .top').html('');
-  $('.answers').html('<%= j render "questions/answers" %>');
+  <% if remotipart_submitted? %>
+    $('.answers').html("<%= j "#{render "questions/answers"}" %>");
+  <% else %>
+    $('.answers').html('<%= j render "questions/answers" %>');
+  <% end %>
 <% else %>
   <% if @answer.errors.present? %>
     $('.notice').html("You fill invalid data for answer!")
@@ -8,7 +12,12 @@
       $('.answer-errors').html('<p><%= j message %></p>');
     <% end %>
   <% else %>
-    $('[data-answer-id="' + "<%= @answer.id %>" + '"]')
-      .replaceWith("<%= j render 'answer', answer: @answer, question: @question %>")
+    <% if remotipart_submitted? %>
+      $('[data-answer-id="' + "<%= @answer.id %>" + '"]')
+        .replaceWith("<%= j "#{render 'answer', answer: @answer, question: @question}" %>")
+    <% else %>
+      $('[data-answer-id="' + "<%= @answer.id %>" + '"]')
+        .replaceWith("<%= j render 'answer', answer: @answer, question: @question %>")
+    <% end %>
   <% end %>
 <% end %>

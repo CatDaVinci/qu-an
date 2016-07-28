@@ -42,6 +42,17 @@ feature 'Add files to question' , %q{
     end
   end
 
+  context 'User can not' do
+    let!(:foreign_question) {create(:question, attachments: create_list(:attachment, 2)) }
+    before { visit question_path(foreign_question) }
+
+    it 'destroy foreign question s file' do
+      within ".question-attachments" do
+        expect(page).to_not have_content('remove file')
+      end
+    end
+  end
+
   context '#edit question' do
     background { visit questions_path }
 
@@ -61,10 +72,12 @@ feature 'Add files to question' , %q{
     end
 
     scenario 'User remove file', js: true do
-      click_on 'Edit'
+      within "#question_#{question_for_edit.id}" do
+        click_on 'Edit'
+      end
       first('.remove_fields').click
       click_on 'Submit'
-      expect(page).to have_css('.file', count: 1)
+      expect(page).to have_content 'Attachments count: 1'
     end
   end
 end

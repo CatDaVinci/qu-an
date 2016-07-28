@@ -5,7 +5,7 @@ div.answer data-answer-id="#{answer.id}" id=dom_id(answer)
   p.answer-body = answer.body
   p.attachments Attachments
   - answer.attachments.each do |at|
-    li
+    li.answer-file
       p= link_to at.file.identifier, at.file.url
       - if user_signed_in? && current_user.id == answer.user_id
         p= link_to 'remove file', attachment_path(at), method: :delete, class: 'remove-answer-file'
@@ -13,9 +13,16 @@ div.answer data-answer-id="#{answer.id}" id=dom_id(answer)
     p
       = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
     p
-      = form_for [question, answer], remote: true, html: { id: "edit-answer-#{answer.id}"} do |f|
-        = f.label :body, "Answer"
+      = form_for [question, answer], remote: true, html: { multipart: true, id: "edit-answer-#{answer.id}"} do |f|
+        .answer-errors
+        = f.label :body
         = f.text_area :body
+        p
+        #files
+          = f.fields_for :attachments do |attachment|
+            = render 'attachments/file', f: attachment
+          .links
+            = link_to_add_association 'Add file', f, :attachments, partial: 'attachments/file'
         = f.submit 'Save'
     p
       = button_to 'Delete', question_answer_path(question, answer), method: :delete, remote: true, class: 'destroy-answer'

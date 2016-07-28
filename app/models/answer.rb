@@ -6,7 +6,9 @@ class Answer < ActiveRecord::Base
   validates :body, :question, :user, presence: true
   validates :body, length: { in: 1..10000 }
 
-  accepts_nested_attributes_for :attachments, reject_if: :all_blank
+  accepts_nested_attributes_for :attachments,
+                                reject_if: :all_blank,
+                                allow_destroy: true
 
   def make_best!
     ActiveRecord::Base.transaction do

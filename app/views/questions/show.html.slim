@@ -1,29 +1,32 @@
 h1 =  "Title: #{@question.title}"
 h1 =  "Body: #{@question.body}"
-p Attachments:
-- @question.attachments.each do |at|
-  li
-    p= link_to at.file.identifier, at.file.url
-    - if current_user&.id == @question.user_id
-      p= link_to "remove file", attachment_path(at), method: :delete, class: 'remove-file'
+
+.question-attachments
+  p Attachments:
+  - @question.attachments.each do |at|
+    li
+      p= link_to at.file.identifier, at.file.url
+      - if current_user&.id == @question.user_id
+        p= link_to "remove file", attachment_path(at), method: :delete, class: 'remove-file'
 
 h3 Answers
 .answers
   = render 'answers'
 
 - if user_signed_in?
-  h3 You answer
-  = form_for([@question, @answer], remote: true) do |f|
-    .answer-errors
-    = f.label :body
-    = f.text_area :body
-    p
-    #files
-      = f.fields_for :attachments do |attachment|
-        = render 'attachments/file', f: attachment
-      .links
-        = link_to_add_association 'Add file', f, :attachments, partial: 'attachments/file'
-    = f.submit 'Create'
+  .new-answer
+    h3 You answer
+    = form_for([@question, @answer], remote: true) do |f|
+      .answer-errors
+      = f.label :body
+      = f.text_area :body
+      p
+      #files
+        = f.fields_for :attachments do |attachment|
+          = render 'attachments/file', f: attachment
+        .links
+          = link_to_add_association 'Add file', f, :attachments, partial: 'attachments/file'
+      = f.submit 'Create'
 
-  - if current_user.id == @question.user_id
-    = button_to 'Delete', question_path(@question), method: :delete
+    - if current_user.id == @question.user_id
+      = button_to 'Delete', question_path(@question), method: :delete
