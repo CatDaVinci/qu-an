@@ -47,6 +47,17 @@ feature 'Add files to answer', %q{
     end
   end
 
+  context 'User can not' do
+    let!(:foreign_answer) { create(:answer, question: question, attachments: create_list(:attachment, 2)) }
+    before { visit question_path(question) }
+
+    it 'destroy foreign answer s file' do
+      within ".answers-attachments" do
+        expect(page).to_not have_content('remove file')
+      end
+    end
+  end
+
   context "#Update anser" do
     given!(:answer) { create(:answer, user: user, question: question, attachments: create_list(:attachment, 2)) }
     given!(:edit_answer) { create(:answer, user: user, question: question, attachments: create_list(:attachment, 2)) }
