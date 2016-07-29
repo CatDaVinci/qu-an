@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: [ :index, :show ]
+  include PublicIndexShow
   before_action :load_question, only: [:show, :update, :destroy]
   before_action :redirect_if_not_own_question, only: [:update, :destroy]
 
